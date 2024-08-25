@@ -4,7 +4,7 @@
   "private": true,
   "author": "Creative Tim",
   "license": "See license in https://www.creative-tim.com/license",
-  "description": "React version of Material Dashboard 2 by Creative Tim",
+  "description": "React version of Joblancer by Creative Tim",
   "bugs": {
     "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
   },
@@ -18,6 +18,7 @@
     "@emotion/styled": "11.10.8",
     "@mui/icons-material": "5.11.16",
     "@mui/material": "5.12.3",
+    "@mui/x-date-pickers": "^7.14.0",
     "axios": "^1.7.4",
     "chart.js": "4.3.0",
     "chroma-js": "2.4.2",

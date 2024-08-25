@@ -1,6 +1,6 @@
 /**
 =========================================================
-* Material Dashboard 2 React - v2.2.0
+* Joblancer React - v2.2.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
@@ -26,12 +26,12 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Icon from "@mui/material/Icon";
 
-// Material Dashboard 2 React components
+// Joblancer React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 
-// Material Dashboard 2 React base styles
+// Joblancer React base styles
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
@@ -66,7 +66,7 @@ function Header({ children }) {
 
   return (
     <MDBox position="relative" mb={5}>
-      <MDBox
+      {/* <MDBox
         display="flex"
         alignItems="center"
         position="relative"
@@ -82,7 +82,7 @@ function Header({ children }) {
           backgroundPosition: "50%",
           overflow: "hidden",
         }}
-      />
+      /> */}
       <Card
         sx={{
           position: "relative",
@@ -106,7 +106,7 @@ function Header({ children }) {
               </MDTypography>
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+          {/* <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
             <AppBar position="static">
               <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
                 <Tab
@@ -135,7 +135,7 @@ function Header({ children }) {
                 />
               </Tabs>
             </AppBar>
-          </Grid>
+          </Grid> */}
         </Grid>
         {children}
       </Card>

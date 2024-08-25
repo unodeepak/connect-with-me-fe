@@ -9,7 +9,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
 
-// Material Dashboard 2 React components
+// Joblancer React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
@@ -88,7 +88,7 @@ function Basic() {
         </MDBox>
 
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox component="form" role="form" onSubmit={handleSubmit}>
             <MDBox mb={2}>
               <MDInput
                 type="email"
@@ -97,6 +97,7 @@ function Basic() {
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
+                required
               />
             </MDBox>
             <MDBox mb={2}>
@@ -107,6 +108,7 @@ function Basic() {
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
+                required
               />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
@@ -121,7 +123,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth onClick={handleSubmit}>
+              <MDButton variant="gradient" color="info" fullWidth type="submit">
                 sign in
               </MDButton>
             </MDBox>
@@ -130,6 +132,7 @@ function Basic() {
                 Don&apos;t have an account?{" "}
                 <MDTypography
                   component={Link}
+                  type="submit"
                   to="/authentication/sign-up"
                   variant="button"
                   color="info"

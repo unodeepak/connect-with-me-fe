@@ -25,10 +25,9 @@ function Dashboard() {
     const fetchData = async () => {
       try {
         const userData = JSON.parse(localStorage.getItem("userData"));
-        let wallet = await axiosInstance.get(`/payment/getBalanceByUserId/${userData._id}`);
         let dashboardData = await axiosInstance.get(`/user/getUserDashboard`);
         dashboardData = dashboardData?.data?.data;
-        dashboardData.amount = wallet?.data?.data?.amount;
+        // dashboardData.amount = wallet?.data?.data?.amount;
         // console.log({ dashboardData });
         setData(dashboardData);
 
