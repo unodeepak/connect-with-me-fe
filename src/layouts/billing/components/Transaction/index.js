@@ -31,7 +31,6 @@ function Transaction({ color, icon, name, description, value }) {
   );
 }
 
-// Typechecking props of the Transaction
 Transaction.propTypes = {
   color: PropTypes.oneOf([
     "primary",
