@@ -8,4 +8,6 @@
   .Toastify__toast-container {
     padding: 0 20px; /* Adjust padding if necessary */
   }
-  
+  .MuiSelect-select MuiSelect-outlined MuiInputBase-input {
+    height: 40px !important;
+  } 

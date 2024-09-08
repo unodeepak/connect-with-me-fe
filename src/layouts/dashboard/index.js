@@ -13,7 +13,6 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
-import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import { useEffect, useState } from "react";
 import axiosInstance from "layouts/authentication/instance/instance";
 
@@ -51,7 +50,7 @@ function Dashboard() {
                 color="success"
                 icon="weekend"
                 title="Complete Projects"
-                count={data?.completeCount}
+                count={data?.completeCount || 0}
                 percentage={{
                   color: "success",
                   amount: "+55%",
@@ -148,16 +147,13 @@ function Dashboard() {
         </MDBox>
         <MDBox>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={8}>
+            <Grid item xs={12} md={6} lg={12}>
               <Projects />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
             </Grid>
           </Grid>
         </MDBox>
       </MDBox>
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }

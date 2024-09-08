@@ -12,6 +12,16 @@ import MDTypography from "components/MDTypography";
 
 // Joblancer React examples
 import DataTable from "examples/Tables/DataTable";
+import {
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 // Data
 import data from "layouts/dashboard/components/Projects/data";
@@ -22,6 +32,19 @@ function Projects() {
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
+
+  const users = [
+    { name: "John Doe", earnings: "$12000", badge: "Gold", projects: 24 },
+    { name: "Jane Smith", earnings: "$10500", badge: "Silver", projects: 18 },
+    { name: "Michael Johnson", earnings: "$9800", badge: "Platinum", projects: 22 },
+    { name: "Emily Davis", earnings: "$8500", badge: "Gold", projects: 20 },
+    { name: "Robert Wilson", earnings: "$7900", badge: "Silver", projects: 16 },
+    { name: "Sophia Brown", earnings: "$7300", badge: "Gold", projects: 14 },
+    { name: "William Taylor", earnings: "$6900", badge: "Bronze", projects: 12 },
+    { name: "Olivia Martinez", earnings: "$6700", badge: "Silver", projects: 15 },
+    { name: "James Anderson", earnings: "$6100", badge: "Bronze", projects: 13 },
+    { name: "Isabella Thompson", earnings: "$5800", badge: "Platinum", projects: 10 },
+  ];
 
   const renderMenu = (
     <Menu
@@ -49,38 +72,45 @@ function Projects() {
       <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
         <MDBox>
           <MDTypography variant="h6" gutterBottom>
-            Top Users
+            All Time Top Users
           </MDTypography>
-          <MDBox display="flex" alignItems="center" lineHeight={0}>
-            <Icon
-              sx={{
-                fontWeight: "bold",
-                color: ({ palette: { info } }) => info.main,
-                mt: -0.5,
-              }}
-            >
-              done
-            </Icon>
-            <MDTypography variant="button" fontWeight="regular" color="text">
-              &nbsp;<strong>30 done</strong> this month
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-        <MDBox color="text" px={2}>
-          <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
-            more_vert
-          </Icon>
         </MDBox>
         {renderMenu}
       </MDBox>
       <MDBox>
-        <DataTable
-          table={{ columns, rows }}
-          showTotalEntries={false}
-          isSorted={false}
-          noEndBorder
-          entriesPerPage={false}
-        />
+        <Grid container spacing={3} justifyContent="center">
+          <Grid item xs={12}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableRow>
+                  <TableCell>
+                    <strong>Name</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Earnings</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Badge</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Total Projects</strong>
+                  </TableCell>
+                </TableRow>
+
+                <TableBody>
+                  {users.map((user, index) => (
+                    <TableRow key={index + Math.random()}>
+                      <TableCell>{user.name}</TableCell>
+                      <TableCell>{user.earnings}</TableCell>
+                      <TableCell>{user.badge}</TableCell>
+                      <TableCell>{user.projects}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        </Grid>
       </MDBox>
     </Card>
   );

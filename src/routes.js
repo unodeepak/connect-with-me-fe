@@ -2,7 +2,7 @@ import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
 import RTL from "layouts/rtl";
-import Notifications from "layouts/notifications";
+// import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
@@ -37,14 +37,14 @@ const routes = [
     route: "/billing",
     component: <Billing />,
   },
-  {
-    type: "collapse",
-    name: "Notifications",
-    key: "notifications",
-    icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Notifications",
+  //   key: "notifications",
+  //   icon: <Icon fontSize="small">notifications</Icon>,
+  //   route: "/notifications",
+  //   component: <Notifications />,
+  // },
   {
     type: "collapse",
     name: "Profile",
@@ -73,7 +73,7 @@ const routes = [
     type: "collapse",
     name: "Verify Otp",
     key: "verify-otp",
-    icon: <Icon fontSize="small">verify_otp</Icon>,
+    // icon: <Icon fontSize="small">verify_otp</Icon>,
     route: "/authentication/verify-otp",
     component: <VerifyOtp />,
   },
@@ -81,7 +81,7 @@ const routes = [
     type: "collapse",
     name: "Create Password",
     key: "create-password",
-    // icon: <Icon fontSize="small">verify_otp</Icon>,
+    // icon: <Icon fontSize="small">create-password</Icon>,
     route: "/authentication/create-password",
     component: <CreatePassword />,
   },
