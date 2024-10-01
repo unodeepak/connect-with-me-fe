@@ -1,43 +1,14 @@
-/**
-=========================================================
-* Joblancer React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
-
-// react-router components
 import { Link } from "react-router-dom";
-
-// prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
-
-// @mui material components
 import Container from "@mui/material/Container";
 import Icon from "@mui/material/Icon";
-
-// Joblancer React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
-
-// Joblancer React example components
 import DefaultNavbarLink from "examples/Navbars/DefaultNavbar/DefaultNavbarLink";
 import DefaultNavbarMobile from "examples/Navbars/DefaultNavbar/DefaultNavbarMobile";
-
-// Joblancer React base styles
 import breakpoints from "assets/theme/base/breakpoints";
-
-// Joblancer React context
 import { useMaterialUIController } from "context";
 
 function DefaultNavbar({ transparent, light, action }) {
