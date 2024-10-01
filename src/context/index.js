@@ -1,32 +1,8 @@
-/**
-=========================================================
-* Joblancer React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-/**
-  This file is used for controlling the global states of the components,
-  you can customize the states for the different components here.
-*/
-
 import { createContext, useContext, useReducer, useMemo } from "react";
-
-// prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
-// Joblancer React main context
 const MaterialUI = createContext();
 
-// Setting custom name for the context which is visible on react dev tools
 MaterialUI.displayName = "MaterialUIContext";
 
 // Joblancer React reducer
