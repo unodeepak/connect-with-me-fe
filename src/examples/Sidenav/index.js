@@ -16,13 +16,11 @@ import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
-
-// Joblancer React example components
 import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
-
-// Custom styles for the Sidenav
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { useNavigate } from "react-router-dom";
 
 // Joblancer React context
 import {
@@ -36,10 +34,36 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const location = useLocation();
+  const navigate = useNavigate();
   const collapseName = location.pathname.replace("/", "");
 
-  let textColor = "white";
+  const logOutMe = () => {
+    try {
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("userData");
 
+      console.log("Now, you are logout");
+    } catch (err) {
+      console.log("Error is logOutMe: ", err);
+    }
+  };
+
+  const checkLogin = () => {
+    try {
+      const refToken = localStorage.getItem("refreshToken");
+      const accessToken = localStorage.getItem("accessToken");
+      const userData = localStorage.getItem("userData");
+
+      if (!refToken || !accessToken || !Object.keys(userData)?.length) {
+        navigate("/authentication/sign-in");
+      }
+      console.log("All data Present");
+    } catch (err) {
+      console.log("Error is checkLogin: ", err);
+    }
+  };
+  let textColor = "white";
   if (transparentSidenav || (whiteSidenav && !darkMode)) {
     textColor = "dark";
   } else if (whiteSidenav && darkMode) {
@@ -49,6 +73,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
   useEffect(() => {
+    checkLogin();
     // A function that sets the mini state of the sidenav.
     function handleMiniSidenav() {
       setMiniSidenav(dispatch, window.innerWidth < 1200);
@@ -72,7 +97,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
     let returnValue;
 
-    if (icon) {
+    if (icon && !["sign-up", "sign-in"]?.includes(key)) {
       if (type === "collapse") {
         returnValue = href ? (
           <Link
@@ -167,6 +192,15 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         }
       />
       <List>{renderRoutes}</List>
+      <List className="logout_btn">
+        <NavLink onClick={() => logOutMe()} key={"logout"} to={"/authentication/sign-in"}>
+          <SidenavCollapse
+            name={"Logout"}
+            icon={<ExitToAppIcon sx={{ color: "red", fontSize: 40 }} />}
+            active={false}
+          />
+        </NavLink>
+      </List>
     </SidenavRoot>
   );
 }

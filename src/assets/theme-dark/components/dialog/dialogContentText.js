@@ -1,7 +1,5 @@
 import typography from "assets/theme-dark/base/typography";
 import colors from "assets/theme-dark/base/colors";
-
-// Joblancer React helper functions
 import rgba from "assets/theme-dark/functions/rgba";
 
 const { size } = typography;
