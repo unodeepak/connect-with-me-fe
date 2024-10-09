@@ -11,3 +11,13 @@
   .MuiSelect-select MuiSelect-outlined MuiInputBase-input {
     height: 40px !important;
   } 
+  .logout_btn {
+    /* border: 2px solid red; */
+    position: absolute !important;
+    bottom: 20px;
+    width: 100%;
+  }
+
+  .logout_btn a li div:hover {
+    background: red !important;
+  }

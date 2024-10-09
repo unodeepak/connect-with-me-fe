@@ -1,8 +1,6 @@
 import colors from "assets/theme-dark/base/colors";
 import typography from "assets/theme-dark/base/typography";
 import borders from "assets/theme-dark/base/borders";
-
-// Joblancer React Helper Functions
 import rgba from "assets/theme-dark/functions/rgba";
 
 const { info, inputBorderColor, dark, grey, white } = colors;
