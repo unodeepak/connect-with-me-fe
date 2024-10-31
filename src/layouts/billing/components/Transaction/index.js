@@ -19,41 +19,17 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axiosInstance from "layouts/authentication/instance/instance";
+import { toast } from "react-toastify";
 
 function Transaction({ color, icon, name, description, value }) {
   const [filters, setFilters] = useState({
     startDate: "",
     endDate: "",
-    transactionType: "all", // 'credited', 'debited', 'all'
-    status: "all", // 'pending', 'failed', 'success', 'all'
+    transactionType: "all",
+    status: "all",
   });
-  const [transactions, setTransactions] = useState([
-    {
-      id: "1",
-      amount: 100,
-      status: "success",
-      type: "credited",
-      imageLink: "https://via.placeholder.com/50",
-      createdAt: "2024-09-07T10:00:00Z",
-    },
-    {
-      id: "2",
-      amount: 50,
-      status: "pending",
-      type: "debited",
-      imageLink: "https://via.placeholder.com/50",
-      createdAt: "2024-09-06T12:30:00Z",
-    },
-    {
-      id: "3",
-      amount: 75,
-      status: "failed",
-      type: "credited",
-      imageLink: "https://via.placeholder.com/50",
-      createdAt: "2024-09-05T09:45:00Z",
-    },
-  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

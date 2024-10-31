@@ -1,13 +1,17 @@
 /* src/customToastStyles.css */
 
 .Toastify__toast {
-    font-size: 14px; /* Adjust the font size as needed */
-  }
-  
-  /* You can also adjust other styles like padding if needed */
-  .Toastify__toast-container {
-    padding: 0 20px; /* Adjust padding if necessary */
-  }
-  .MuiSelect-select MuiSelect-outlined MuiInputBase-input {
-    height: 40px !important;
-  } 
+  font-size: 14px; /* Adjust the font size as needed */
+}
+
+/* You can also adjust other styles like padding if needed */
+.Toastify__toast-container {
+  padding: 0 20px; /* Adjust padding if necessary */
+}
+.MuiSelect-select MuiSelect-outlined MuiInputBase-input {
+  height: 40px !important;
+}
+
+.drop-down-select {
+  height: 40px !important;
+}

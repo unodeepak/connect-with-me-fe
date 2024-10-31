@@ -8,6 +8,7 @@ import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import VerifyOtp from "layouts/authentication/verifyOtp/index.js";
 import CreatePassword from "layouts/authentication/createPassword";
+import Proposal from "layouts/proposal";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -84,6 +85,14 @@ const routes = [
     // icon: <Icon fontSize="small">create-password</Icon>,
     route: "/authentication/create-password",
     component: <CreatePassword />,
+  },
+  {
+    type: "collapse",
+    name: "Proposal",
+    key: "proposal",
+    icon: <Icon fontSize="small">proposal</Icon>,
+    route: "/proposal",
+    component: <Proposal />,
   },
 ];
 

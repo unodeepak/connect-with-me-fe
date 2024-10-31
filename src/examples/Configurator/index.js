@@ -311,7 +311,7 @@ function Configurator() {
         </MDBox>
         <MDBox mt={2} textAlign="center">
           <MDBox mb={0.5}>
-            <MDTypography variant="h6">Thank you for sharing!</MDTypography>
+            {/* <MDTypography variant="h6">Thank you for sharing!</MDTypography> */}
           </MDBox>
 
           <MDBox display="flex" justifyContent="center">

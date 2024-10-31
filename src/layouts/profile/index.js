@@ -197,6 +197,7 @@ function Overview() {
                   <FormControl fullWidth required sx={{ marginBottom: "16px" }}>
                     <InputLabel>Gender</InputLabel>
                     <Select
+                      className="drop-down-select"
                       required
                       name="gender"
                       value={formData.gender || ""}
@@ -378,6 +379,7 @@ function Overview() {
                   <FormControl fullWidth>
                     <InputLabel>Account Type</InputLabel>
                     <Select
+                      className="drop-down-select"
                       name="bankDetails.accountType"
                       value={formData.bankDetails.accountType}
                       onChange={handleChange}

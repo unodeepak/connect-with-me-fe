@@ -64,7 +64,7 @@ const mockTransactions = [
   // Add more mock records here...
 ];
 
-function Billing() {
+function Proposal() {
   const [transactions, setTransactions] = useState(mockTransactions);
   const [filteredTransactions, setFilteredTransactions] = useState(mockTransactions);
   const [startDate, setStartDate] = useState(null);
@@ -148,6 +148,11 @@ function Billing() {
     applyFilters({ ...filters, [name]: value });
   };
 
+  const handleAddProject = () => {
+    console.log("Add Project button clicked!");
+    // Add your logic here
+  };
+
   // Filtering logic (filtering locally based on filters)
   const applyFilters = (newFilters) => {
     console.log("Filtering with", newFilters);
@@ -161,12 +166,12 @@ function Billing() {
       <MDBox mt={8}>
         <MDBox mb={3}>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6} lg={3}>
               <MDBox mb={1.5}>
                 <ComplexStatisticsCard
                   color="success"
                   icon="weekend"
-                  title="Total Earning"
+                  title="Total Projects"
                   count={data?.success || 0}
                   percentage={{
                     color: "success",
@@ -174,12 +179,12 @@ function Billing() {
                 />
               </MDBox>
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6} lg={3}>
               <MDBox mb={1.5}>
                 <ComplexStatisticsCard
                   color="warning"
                   icon="leaderboard"
-                  title="Upcoming Amount"
+                  title="Running Projects"
                   count={data?.pending || 0}
                   percentage={{
                     color: "success",
@@ -187,11 +192,23 @@ function Billing() {
                 />
               </MDBox>
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6} lg={3}>
               <MDBox mb={1.5}>
                 <ComplexStatisticsCard
                   icon="store"
-                  title="Cancelled Amount"
+                  title="Pending Projects"
+                  count={data?.failed || 0}
+                  percentage={{
+                    color: "success",
+                  }}
+                />
+              </MDBox>
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <MDBox mb={1.5}>
+                <ComplexStatisticsCard
+                  icon="store"
+                  title="Cancelled Projects"
                   count={data?.failed || 0}
                   percentage={{
                     color: "success",
@@ -205,28 +222,8 @@ function Billing() {
 
       <div style={{ padding: "20px" }}>
         <Paper style={{ padding: "20px", marginBottom: "10px" }}>
-          <h5>Transaction Filters</h5>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={3}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Start Date"
-                  value={startDate}
-                  onChange={(date) => setStartDate(date)}
-                  renderInput={(params) => <TextField {...params} fullWidth />}
-                />
-              </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="End Date"
-                  value={endDate}
-                  onChange={(date) => setEndDate(date)}
-                  renderInput={(params) => <TextField {...params} fullWidth />}
-                />
-              </LocalizationProvider>
-            </Grid>
+          <Grid container spacing={2} justifyContent="space-between" alignItems="center">
+            {/* Left side - Transaction Type */}
             <Grid item xs={12} sm={6} md={3}>
               <FormControl fullWidth>
                 <InputLabel>Transaction Type</InputLabel>
@@ -241,20 +238,12 @@ function Billing() {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth>
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="drop-down-select"
-                >
-                  <MenuItem value="All">All</MenuItem>
-                  <MenuItem value="Success">Success</MenuItem>
-                  <MenuItem value="Pending">Pending</MenuItem>
-                  <MenuItem value="Failed">Failed</MenuItem>
-                </Select>
-              </FormControl>
+
+            {/* Right side - Add Project button */}
+            <Grid item xs={12} sm={6} md={3} style={{ textAlign: "right" }}>
+              <Button variant="contained" color="primary" onClick={handleAddProject}>
+                Add Project
+              </Button>
             </Grid>
           </Grid>
         </Paper>
@@ -306,4 +295,4 @@ function Billing() {
   );
 }
 
-export default Billing;
+export default Proposal;
