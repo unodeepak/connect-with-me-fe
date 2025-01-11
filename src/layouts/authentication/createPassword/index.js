@@ -71,7 +71,7 @@ function CreatePassword() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Create Your Password 2
+            Create Your Password
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
             Enter your new password below
