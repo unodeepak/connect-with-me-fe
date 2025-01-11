@@ -24,6 +24,10 @@ import {
   Paper,
   Typography,
   Pagination,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"; // Import DatePicker from MUI
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -35,38 +39,20 @@ import { SingleInputDateRangeField } from "@mui/x-date-pickers-pro/SingleInputDa
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { toast } from "react-toastify";
 import axiosInstance from "layouts/authentication/instance/instance";
-// Mock transaction data
-const mockTransactions = [
-  {
-    id: 1,
-    amount: 100,
-    status: "Success",
-    type: "Credited",
-    date: "2023-09-01",
-    createdAt: "2023-09-01",
-  },
-  {
-    id: 2,
-    amount: 200,
-    status: "Pending",
-    type: "Debited",
-    date: "2023-09-02",
-    createdAt: "2023-09-02",
-  },
-  {
-    id: 3,
-    amount: 150,
-    status: "Failed",
-    type: "Debited",
-    date: "2023-09-03",
-    createdAt: "2023-09-03",
-  },
-  // Add more mock records here...
-];
+import capitalize from "helpers/capitalize";
+import moment from "moment";
+
+function debounce(func, delay) {
+  let timeoutId;
+  return (...args) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}
 
 function Proposal() {
-  const [transactions, setTransactions] = useState(mockTransactions);
-  const [filteredTransactions, setFilteredTransactions] = useState(mockTransactions);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -74,21 +60,69 @@ function Proposal() {
   const [data, setData] = useState("");
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(10);
-
+  const [open, setOpen] = useState(false);
   const [transactionType, setTransactionType] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
   const [topBarData, setTopBarData] = useState({});
+  const [formData, setFormData] = useState({
+    client: {
+      name: "",
+      email: "",
+      phone: "",
+      gender: "",
+    },
+    projectName: "",
+    estimateTimeInDays: 0,
+  });
+  const [description, setDescription] = useState("");
+  const wordLimit = 1000;
+  const [wordCount, setWordCount] = useState(0);
+  const [status, setStatus] = useState("all");
+  const [proposalData, setProposalData] = useState([]);
+  const [length, setLength] = useState(10);
+  const limit = 10;
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Function to simulate a search operation
+  const performSearch = (query) => {
+    console.log("Searching for:", query);
+    // Simulate API call or search logic here
+  };
+
+  // Create a debounced version of the performSearch function
+  const debouncedSearch = debounce(performSearch, 500);
+
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value); // Update the state
+    debouncedSearch(value); // Call the debounced function
+  };
+
+  const getProjects = async () => {
+    try {
+      let data = await axiosInstance.get("/proposal/getProjectByUserId", {
+        params: {
+          page,
+          status: status ? status?.toLowerCase() : "all",
+          userId: JSON.parse(localStorage.getItem("userData"))["_id"],
+          limit,
+        },
+      });
+      setProposalData(data?.data?.data?.data || []);
+      setLength(data?.data?.data?.length || 10);
+    } catch (err) {
+      toast.error(err?.response?.data?.msg);
+      console.log("Error is : ", err);
+    }
+  };
   const getData = async () => {
     try {
-      let data = await axiosInstance.get("/payment/getTopBarTransaction");
-      let transactions = await axiosInstance.get("/payment/getTransactionHistory", {
-        page,
-        limit: 10,
-      });
+      await getProjects();
+      let data = await axiosInstance.get("/proposal/getProposalTopBarData");
 
       setTopBarData(data?.data?.data || {});
-      setTransactions(transactions?.data?.data || []);
     } catch (err) {
       toast.error(err?.response?.data?.msg);
       console.log("Error is : ", err);
@@ -96,68 +130,71 @@ function Proposal() {
   };
 
   useEffect(() => {
+    getProjects();
+  }, [page, status]);
+
+  const resetData = () => {
+    setFormData({
+      client: {
+        name: "",
+        email: "",
+        phone: "",
+        gender: "",
+      },
+      projectName: "",
+      estimateTimeInDays: 0,
+    });
+    setDescription("");
+  };
+
+  const createProposal = async () => {
+    try {
+      formData.description = description;
+      await axiosInstance.post(`/proposal/createProject`, {
+        ...formData,
+      });
+
+      setOpen(false);
+      toast("Proposal Addes Successfully");
+      resetData();
+    } catch (err) {
+      console.log("Error is : ", err);
+      setOpen(false);
+      toast(err?.message);
+    }
+  };
+
+  const updateFormData = (e) => {
+    const { name, value } = e.target;
+    const [section, field] = name.split(".");
+    if (section && field) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [section]: {
+          ...prevData[section],
+          [field]: value,
+        },
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  useEffect(() => {
     getData();
   }, []);
 
-  // Filter transactions whenever the filters change
-  useEffect(() => {
-    let filtered = transactions;
-
-    // Date filter
-    if (startDate && endDate) {
-      filtered = filtered.filter(
-        (transaction) =>
-          dayjs(transaction.date).isAfter(dayjs(startDate).subtract(1, "day")) &&
-          dayjs(transaction.date).isBefore(dayjs(endDate).add(1, "day"))
-      );
-    }
-
-    // Type filter (Credited, Debited, All)
-    if (typeFilter !== "All") {
-      filtered = filtered.filter((transaction) => transaction.type === typeFilter);
-    }
-
-    // Status filter (Success, Pending, Failed, All)
-    if (statusFilter !== "All") {
-      filtered = filtered.filter((transaction) => transaction.status === statusFilter);
-    }
-
-    setFilteredTransactions(filtered);
-  }, [startDate, endDate, statusFilter, typeFilter, transactions]);
+  const addDescription = (e) => {
+    setDescription(e.target.value);
+    setWordCount(e?.target?.value?.length);
+  };
 
   // Handle page change
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-  };
-
-  // Pagination: Calculate the records to display on the current page
-  const paginatedTransactions = filteredTransactions.slice(
-    (page - 1) * rowsPerPage,
-    page * rowsPerPage
-  );
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-    applyFilters({ ...filters, [name]: value });
-  };
-
-  // DatePicker change handler
-  const handleDateChange = (name, value) => {
-    setFilters((prev) => ({ ...prev, [name]: value }));
-    applyFilters({ ...filters, [name]: value });
-  };
-
-  const handleAddProject = () => {
-    console.log("Add Project button clicked!");
-    // Add your logic here
-  };
-
-  // Filtering logic (filtering locally based on filters)
-  const applyFilters = (newFilters) => {
-    console.log("Filtering with", newFilters);
-    // Here you would typically make an API request with the newFilters to fetch the filtered transactions
-    // For now, we're just logging the applied filters
   };
 
   return (
@@ -172,7 +209,7 @@ function Proposal() {
                   color="success"
                   icon="weekend"
                   title="Total Projects"
-                  count={data?.success || 0}
+                  count={topBarData?.total || 0}
                   percentage={{
                     color: "success",
                   }}
@@ -185,7 +222,7 @@ function Proposal() {
                   color="warning"
                   icon="leaderboard"
                   title="Running Projects"
-                  count={data?.pending || 0}
+                  count={topBarData?.running || 0}
                   percentage={{
                     color: "success",
                   }}
@@ -197,7 +234,7 @@ function Proposal() {
                 <ComplexStatisticsCard
                   icon="store"
                   title="Pending Projects"
-                  count={data?.failed || 0}
+                  count={topBarData?.pending || 0}
                   percentage={{
                     color: "success",
                   }}
@@ -209,7 +246,7 @@ function Proposal() {
                 <ComplexStatisticsCard
                   icon="store"
                   title="Cancelled Projects"
-                  count={data?.failed || 0}
+                  count={topBarData?.cancelled || 0}
                   percentage={{
                     color: "success",
                   }}
@@ -220,6 +257,112 @@ function Proposal() {
         </MDBox>
       </MDBox>
 
+      <Dialog open={open} fullWidth maxWidth="md">
+        <DialogTitle>Project Details</DialogTitle>
+        <DialogContent mt={2}>
+          <Grid container spacing={2} padding={2}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Client Name"
+                name="client.name"
+                value={searchTerm}
+                onChange={handleInputChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Client Name"
+                name="client.name"
+                value={formData?.client?.name || ""}
+                onChange={updateFormData}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Client Email"
+                name="client.email"
+                value={formData?.client?.email || ""}
+                onChange={updateFormData}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Phone Number"
+                name="client.phone"
+                value={formData?.client?.phone || ""}
+                onChange={updateFormData}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth required>
+                <InputLabel>Gender</InputLabel>
+                <Select
+                  name="client.gender"
+                  value={formData?.client?.gender || ""}
+                  onChange={updateFormData}
+                  label="Gender"
+                  className="custom-select"
+                >
+                  <MenuItem value="male">Male</MenuItem>
+                  <MenuItem value="female">Female</MenuItem>
+                  <MenuItem value="other">Other</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Project Name"
+                name="projectName"
+                value={formData?.projectName || ""}
+                onChange={updateFormData}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Estimate Time in Days"
+                name="estimateTimeInDays"
+                value={formData?.estimateTimeInDays || 0}
+                onChange={updateFormData}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <TextField
+                padding={1}
+                label="Description"
+                multiline
+                rows={8} // Adjust height
+                fullWidth
+                value={description}
+                onChange={addDescription}
+                variant="outlined"
+                helperText={`${wordCount}/${wordLimit} character's`}
+                inputProps={{ maxLength: wordLimit * 10 }} // To handle very long words
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions style={{ justifyContent: "center" }}>
+          <Button color="secondary" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button onClick={createProposal} color="primary" variant="contained">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <div style={{ padding: "20px" }}>
         <Paper style={{ padding: "20px", marginBottom: "10px" }}>
           <Grid container spacing={2} justifyContent="space-between" alignItems="center">
@@ -228,20 +371,30 @@ function Proposal() {
               <FormControl fullWidth>
                 <InputLabel>Transaction Type</InputLabel>
                 <Select
-                  value={typeFilter}
-                  onChange={(e) => setTypeFilter(e.target.value)}
-                  className="drop-down-select"
+                  name="transactionType"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  label="Transaction Type"
+                  className="custom-select"
                 >
-                  <MenuItem value="All">All</MenuItem>
-                  <MenuItem value="Credited">Credited</MenuItem>
-                  <MenuItem value="Debited">Debited</MenuItem>
+                  <MenuItem value="all">All</MenuItem>
+                  <MenuItem value="pending">Pending</MenuItem>
+                  <MenuItem value="approved">Approved</MenuItem>
+                  <MenuItem value="running">Running</MenuItem>
+                  <MenuItem value="completed">Completed</MenuItem>
+                  <MenuItem value="cancelled">Cancelled</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
 
             {/* Right side - Add Project button */}
             <Grid item xs={12} sm={6} md={3} style={{ textAlign: "right" }}>
-              <Button variant="contained" color="primary" onClick={handleAddProject}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setOpen(true)}
+                style={{ color: "white" }}
+              >
                 Add Project
               </Button>
             </Grid>
@@ -250,26 +403,26 @@ function Proposal() {
 
         <TableContainer component={Paper}>
           <Table>
-            {/* <TableHead> */}
-            <TableRow>
+            <TableRow style={{ background: "black", color: "white" }}>
               <TableCell>ID</TableCell>
-              <TableCell>Amount</TableCell>
+              <TableCell>Project Name</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Type</TableCell>
+              <TableCell>Estimat Time</TableCell>
               <TableCell>Date</TableCell>
-              <TableCell>Created At</TableCell>
             </TableRow>
-            {/* </TableHead> */}
+
             <TableBody>
-              {paginatedTransactions.length > 0 ? (
-                paginatedTransactions.map((transaction) => (
-                  <TableRow key={transaction.id}>
-                    <TableCell>{transaction.id}</TableCell>
-                    <TableCell>{transaction.amount}</TableCell>
-                    <TableCell>{transaction.status}</TableCell>
-                    <TableCell>{transaction.type}</TableCell>
-                    <TableCell>{transaction.date}</TableCell>
-                    <TableCell>{transaction.createdAt}</TableCell>
+              {proposalData.length > 0 ? (
+                proposalData.map((item) => (
+                  <TableRow key={item._id}>
+                    <TableCell>{item?._id?.slice(-6)}</TableCell>
+                    <TableCell>{capitalize(item.projectName)}</TableCell>
+                    <TableCell>
+                      {capitalize(item.status)}
+                      {/* <Button variant="contained">{capitalize(item.status)}</Button> */}
+                    </TableCell>
+                    <TableCell>{item.estimateTimeInDays} Days</TableCell>
+                    <TableCell>{moment(item?.createdAt).format("DD-MM-YYYY : hh:mm")}</TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -282,9 +435,8 @@ function Proposal() {
             </TableBody>
           </Table>
         </TableContainer>
-
         <Pagination
-          count={Math.ceil(filteredTransactions.length / rowsPerPage)}
+          count={Math.ceil(length / limit)}
           page={page}
           onChange={handleChangePage}
           color="primary"

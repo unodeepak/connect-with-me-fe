@@ -1,17 +1,60 @@
 /* src/customToastStyles.css */
 
 .Toastify__toast {
-  font-size: 14px; /* Adjust the font size as needed */
+  font-size: 14px;
+  /* Adjust the font size as needed */
 }
 
 /* You can also adjust other styles like padding if needed */
 .Toastify__toast-container {
-  padding: 0 20px; /* Adjust padding if necessary */
+  padding: 0 20px;
+  /* Adjust padding if necessary */
 }
+
 .MuiSelect-select MuiSelect-outlined MuiInputBase-input {
   height: 40px !important;
 }
 
 .drop-down-select {
   height: 40px !important;
+}
+
+.custom-select {
+  padding: 10px !important;
+  border-radius: 4px !important;
+  background-color: #fff !important;
+  border: 1px solid rgba(0, 0, 0, 0) !important;
+}
+
+.custom-select:focus {
+  border-color: #3f51b5 !important;
+  outline: none;
+}
+
+.MuiSelect-select.custom-select {
+  padding: 10px !important;
+}
+
+.MuiSelect-select.custom-select.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #3f51b5 !important;
+}
+
+.logout_btn {
+  height: 100%;
+}
+
+.logout_btn a {
+  position: absolute;
+  bottom: 36px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  width: 81%;
+  left: 20px;
+  border-radius: 6px;
+}
+
+.logout_btn a:hover {
+  background: red !important;
+  color: white;
 }

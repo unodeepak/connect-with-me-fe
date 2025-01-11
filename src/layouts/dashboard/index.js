@@ -26,8 +26,6 @@ function Dashboard() {
         const userData = JSON.parse(localStorage.getItem("userData"));
         let dashboardData = await axiosInstance.get(`/user/getUserDashboard`);
         dashboardData = dashboardData?.data?.data;
-        // dashboardData.amount = wallet?.data?.data?.amount;
-        // console.log({ dashboardData });
         setData(dashboardData);
 
         console.log("data is : ", data);
@@ -48,13 +46,13 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="success"
-                icon="weekend"
+                icon="check_circle_outline"
                 title="Complete Projects"
                 count={data?.completeCount || 0}
                 percentage={{
                   color: "success",
-                  amount: "+55%",
-                  label: "than last week",
+                  // amount: "+55%",
+                  // label: "than last week",
                 }}
               />
             </MDBox>
@@ -63,13 +61,13 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="warning"
-                icon="leaderboard"
+                icon="play_circle_outline"
                 title="Running Projects"
-                count={data?.runningCount}
+                count={data?.runningCount || 0}
                 percentage={{
                   color: "success",
-                  amount: "+3%",
-                  label: "than last month",
+                  // amount: "+3%",
+                  // label: "than last month",
                 }}
               />
             </MDBox>
@@ -77,13 +75,13 @@ function Dashboard() {
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
-                icon="store"
+                icon="hourglass_empty"
                 title="Pending Projects"
-                count={data?.pendingCount}
+                count={data?.pendingCount || 0}
                 percentage={{
                   color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
+                  // amount: "+1%",
+                  // label: "than yesterday",
                 }}
               />
             </MDBox>
@@ -92,19 +90,19 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="success"
-                icon="store"
+                icon={<span>₹</span>}
                 title="Revenue"
-                count={data?.amount}
+                count={data?.amount || 0}
                 percentage={{
                   color: "success",
-                  amount: "",
-                  label: "Just updated",
+                  // amount: "",
+                  // label: "Just updated",
                 }}
               />
             </MDBox>
           </Grid>
         </Grid>
-        <MDBox mt={4.5}>
+        {/* <MDBox mt={4.5}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
@@ -144,7 +142,7 @@ function Dashboard() {
               </MDBox>
             </Grid>
           </Grid>
-        </MDBox>
+        </MDBox> */}
         <MDBox>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={12}>
